@@ -49,7 +49,7 @@ from hyperopt import hp, tpe, fmin, space_eval
 
 # Deep learning
 from keras.models import Sequential
-from keras.layers import (
+from import (
     Dense, Conv1D, MaxPooling1D, Flatten, Dropout, BatchNormalization
 )
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
