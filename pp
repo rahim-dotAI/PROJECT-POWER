@@ -1,66 +1,55 @@
-# Standard library imports
+# Import necessary libraries
 import os
 import logging
-from logging.handlers import RotatingFileHandler
 import json
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# Data manipulation and analysis
-import pandas as pd
 import numpy as np
-
-# Data visualization
+import pandas as pd
 import matplotlib.pyplot as plt
-
-# Statistical functions
+import yfinance as yf
+import backtrader as bt
 from scipy.stats import norm
 
-# Machine learning
+# Machine Learning libraries
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.linear_model import LogisticRegression, LinearRegression
+from sklearn.svm import SVC, SVR
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
     roc_auc_score, mean_squared_error, confusion_matrix, classification_report
 )
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.ensemble import (
-    RandomForestClassifier, RandomForestRegressor
-)
-from sklearn.linear_model import (
-    LogisticRegression, LinearRegression
-)
-from sklearn.svm import (
-    SVC, SVR
-)
+from joblib import Parallel, delayed
+
+# XGBoost
 from xgboost import XGBClassifier, XGBRegressor
 
-# Financial data retrieval
-import yfinance as yf
-
-# Backtesting framework
-import backtrader as bt
-
-# Technical analysis
-from talib import RSI, MACD, EMA, SMA
+# Keras for deep learning
+from keras.models import Sequential
+from keras.layers import Dense, Conv1D, MaxPooling1D, Flatten, Dropout, BatchNormalization
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from keras.utils import plot_model
 
 # Hyperparameter optimization
 from hyperopt import hp, tpe, fmin, space_eval
 
-# Deep learning
-from keras.models import Sequential
-from import (
-    Dense, Conv1D, MaxPooling1D, Flatten, Dropout, BatchNormalization
-)
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau
-from keras.utils import plot_model
+# Technical analysis library
+from talib import RSI, MACD, CANDLE, EMA, SMA
 
-# Joblib for parallel processing
-from joblib import Parallel, delayed
-
-
-# Import custom candlestick functions module
+# Import custom functions for candlestick analysis
 from candlestick_functions import CANDLE
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+handler = RotatingFileHandler('app.log', maxBytes=2000, backupCount=10)
+logger.addHandler(handler)
+
+# Additional setup (e.g., email, data paths, etc.) can go here
 
 # Function to configure logging
 def configure_logging(log_file_path):
