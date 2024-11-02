@@ -3,6 +3,7 @@ import os
 import logging
 import json
 import smtplib
+from logging.handlers import RotatingFileHandler
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -43,14 +44,6 @@ from talib import RSI, MACD, CANDLE, EMA, SMA
 # Import custom functions for candlestick analysis
 from candlestick_functions import CANDLE
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-handler = RotatingFileHandler('app.log', maxBytes=2000, backupCount=10)
-logger.addHandler(handler)
-
-# Additional setup (e.g., email, data paths, etc.) can go here
-
 # Function to configure logging
 def configure_logging(log_file_path):
     """
@@ -64,20 +57,22 @@ def configure_logging(log_file_path):
     """
     try:
         os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
-        logger = logging.getLogger()
+        logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(asctime)s [%(levelname)s] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-        handler = RotatingFileHandler(log_file_path, maxBytes=1024, backupCount=3)
-        handler.setLevel(logging.INFO)
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
+
+        # Avoid adding duplicate handlers
+        if not logger.hasHandlers():
+            formatter = logging.Formatter('%(asctime)s [%(levelname)s] - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+            handler = RotatingFileHandler(log_file_path, maxBytes=1024, backupCount=3)
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
     except FileNotFoundError as file_err:
         print(f"Error creating log directory: {file_err}")
     except Exception as e:
         print(f"An error occurred while configuring logging: {str(e)}")
 
 # Example usage of the logging configuration
-def example_usage_of_logging():
+def example_usage_of_logging(logger):
     """
     Example usage of logging with different log levels.
 
@@ -85,11 +80,11 @@ def example_usage_of_logging():
         None
     """
     try:
-        logging.debug('This is a debug message')
-        logging.info('This is an info message')
-        logging.warning('This is a warning message')
-        logging.error('This is an error message')
-        logging.critical('This is a critical message')
+        logger.debug('This is a debug message')
+        logger.info('This is an info message')
+        logger.warning('This is a warning message')
+        logger.error('This is an error message')
+        logger.critical('This is a critical message')
     except Exception as e:
         print(f"An error occurred while logging: {str(e)}")
 
@@ -106,6 +101,7 @@ def write_configuration_to_json(config_data, config_file_path):
         None
     """
     try:
+        os.makedirs(os.path.dirname(config_file_path), exist_ok=True)
         with open(config_file_path, 'w') as config_file:
             json.dump(config_data, config_file, indent=4)
         print(f"Configuration data has been saved to {config_file_path}")
@@ -136,6 +132,13 @@ def load_configuration_from_json(config_file_path):
         print(f"Error loading configuration data: {str(e)}")
         return None
 
+# Main code to set up logging and demonstrate logging and JSON operations
+log_file_path = 'app.log'
+configure_logging(log_file_path)
+logger = logging.getLogger(__name__)
+
+example_usage_of_logging(logger)
+
 # Function to initialize machine learning models
 def initialize_ml_models():
     """
@@ -153,19 +156,19 @@ def initialize_ml_models():
         print(f"Error initializing machine learning models: {str(e)}")
         return None, None, None
 
-# Function to download financial data using Yahoo Finance
-def download_financial_data(symbols, start_date, end_date):
+#def download_financial_data(symbols):
     """
     Download financial data using Yahoo Finance.
 
     Parameters:
         symbols (list): List of stock symbols.
-        start_date (str): Start date for data download (YYYY-MM-DD).
-        end_date (str): End date for data download (YYYY-MM-DD).
 
     Returns:
         pd.DataFrame or None: Downloaded financial data if successful, None otherwise.
     """
+    start_date = "2010-01-01"  # Start date for data download
+    end_date = "2023-09-19"     # End date for data download
+
     try:
         data = yf.download(symbols, start=start_date, end=end_date)
         return data
