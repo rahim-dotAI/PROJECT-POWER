@@ -38,8 +38,10 @@ from keras.utils import plot_model
 # Hyperparameter optimization
 from hyperopt import hp, tpe, fmin, space_eval
 
-# Technical analysis library
-from talib import RSI, MACD, CANDLE, EMA, SMA
+# Importing necessary functions from TA-Lib
+from talib import RSI, MACD, EMA, SMA
+from talib import CDLENGULFING, CDLDOJI, CDLMORNINGSTAR, CDLEVENINGSTAR, CDLSHOOTINGSTAR, CDLDARKCLOUDCOVER
+
 
 # Import custom functions for candlestick analysis
 from candlestick_functions import CANDLE
