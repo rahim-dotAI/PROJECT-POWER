@@ -29,11 +29,10 @@ from joblib import Parallel, delayed
 # XGBoost
 from xgboost import XGBClassifier, XGBRegressor
 
-# Keras for deep learning
-from keras.models import Sequential
-from keras.layers import Dense, Conv1D, MaxPooling1D, Flatten, Dropout, BatchNormalization
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau
-from keras.utils import plot_model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Input  # Keras layers are now in tensorflow.keras
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+
 
 # Hyperparameter optimization
 from hyperopt import hp, tpe, fmin, space_eval

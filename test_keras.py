@@ -1,13 +1,11 @@
-import tensorflow as tf
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
 
-# Check TensorFlow version
-print("TensorFlow version:", tf.__version__)
+# Create a simple Sequential model
+model = Sequential()
+model.add(Input(shape=(784,)))  # Define input shape with Input layer
+model.add(Dense(32, activation='relu'))
+model.add(Dense(10, activation='softmax'))
 
-# Create a simple model
-model = tf.keras.models.Sequential([
-    tf.keras.layers.Dense(32, activation='relu', input_shape=(784,)),
-    tf.keras.layers.Dense(10, activation='softmax')
-])
-
-# Print model summary
-model.summary()
+print("Keras is working fine!")
